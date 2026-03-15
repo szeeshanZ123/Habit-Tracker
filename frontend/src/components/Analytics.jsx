@@ -47,8 +47,7 @@ export default function Analytics() {
     try {
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth(); // 0-based
-      const res = await axios.get(`http://localhost:5000/api/habits?year=${year}&month=${month + 1}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+const res = await axios.get(`https://habit-tracker-5ifp.onrender.com/api/habits?year=${year}&month=${month + 1}`, {        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       
       const habits = res.data;

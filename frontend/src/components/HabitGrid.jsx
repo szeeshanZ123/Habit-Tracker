@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Plus, Trash2, Edit2, Save, X } from 'lucide-react';
 import { format, getDaysInMonth, startOfMonth, addMonths, subMonths } from 'date-fns';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function HabitGrid() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [habits, setHabits] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   
   // New habit form
   const [isAddingMode, setIsAddingMode] = useState(false);
@@ -28,12 +30,16 @@ export default function HabitGrid() {
   const fetchHabits = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:5000/api/habits?year=${year}&month=${month + 1}`, {
+      const res = await axios.get(`https://habit-tracker-5ifp.onrender.com/api/habits?year=${year}&month=${month + 1}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setHabits(res.data);
     } catch (err) {
       console.error('Failed to fetch habits', err);
+      if (err.response?.status === 401) {
+        localStorage.removeItem('token');
+        navigate('/login');
+      }
     } finally {
       setLoading(false);
     }
@@ -64,7 +70,7 @@ export default function HabitGrid() {
     setHabits(updatedHabits);
 
     try {
-      await axios.post('http://localhost:5000/api/habits/toggle', {
+      await axios.post('https://habit-tracker-5ifp.onrender.com/api/habits/toggle', {
         habitId,
         year,
         month: month + 1,
@@ -82,7 +88,7 @@ export default function HabitGrid() {
   const addHabit = async () => {
     if (!newHabitName.trim()) return;
     try {
-      const res = await axios.post('http://localhost:5000/api/habits', 
+      const res = await axios.post('https://habit-tracker-5ifp.onrender.com/api/habits', 
         { name: newHabitName },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
       );
@@ -97,7 +103,7 @@ export default function HabitGrid() {
   const deleteHabit = async (habitId) => {
     if(!window.confirm('Are you sure you want to delete this habit?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/habits/${habitId}`, {
+      await axios.delete(`https://habit-tracker-5ifp.onrender.com/api/habits/${habitId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setHabits(habits.filter(h => h._id !== habitId));
@@ -108,7 +114,7 @@ export default function HabitGrid() {
 
   const saveEdit = async (habitId) => {
     try {
-      await axios.put(`http://localhost:5000/api/habits/${habitId}`,
+      await axios.put(`https://habit-tracker-5ifp.onrender.com/api/habits/${habitId}`,
         { name: editName },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
       );

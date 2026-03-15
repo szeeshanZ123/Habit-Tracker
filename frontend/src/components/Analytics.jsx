@@ -43,13 +43,26 @@ export default function Analytics() {
   const handleNextMonth = () => setCurrentDate(addMonths(currentDate, 1));
 
   const fetchStats = async () => {
-    setLoading(true);
-    try {
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth(); // 0-based
-const res = await axios.get(`https://habit-tracker-5ifp.onrender.com/api/habits?year=${year}&month=${month + 1}`, {        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
-      
+  setLoading(true);
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.log("No token found, user not logged in");
+    return;
+  }
+
+  try {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    const res = await axios.get(
+      `https://habit-tracker-5ifp.onrender.com/api/habits?year=${year}&month=${month + 1}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
       const habits = res.data;
       const daysCount = getDaysInMonth(new Date(year, month));
       

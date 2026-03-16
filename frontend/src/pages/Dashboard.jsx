@@ -73,6 +73,9 @@ export default function Dashboard({ toggleDarkMode, isDarkMode, setIsAuthenticat
             <LogOut size={20} className="mr-3" />
             Logout
           </button>
+          <div className="pt-2 text-center text-xs text-gray-400 dark:text-gray-500">
+            Created by Zeeshan Shaikh
+          </div>
         </div>
       </aside>
 

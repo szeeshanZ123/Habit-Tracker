@@ -115,6 +115,9 @@ export default function Signup({ setIsAuthenticated, toggleDarkMode, isDarkMode 
             </div>
           </form>
         </div>
+        <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+          Created by Zeeshan Shaikh
+        </div>
       </div>
     </div>
   );

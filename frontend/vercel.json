@@ -1,7 +1,6 @@
 {
   "routes": [
     { "handle": "filesystem" },
-git add .
     { "src": "/.*", "dest": "/index.html" }
   ]
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Activity, Mail, Lock, Moon, Sun, User } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export default function Signup({ setIsAuthenticated, toggleDarkMode, isDarkMode }) {
   const [email, setEmail] = useState('');
@@ -16,7 +17,7 @@ export default function Signup({ setIsAuthenticated, toggleDarkMode, isDarkMode 
     setLoading(true);
     
     try {
-      const res = await axios.post('https://habit-tracker-5ifp.onrender.com/api/auth/register', { email, password });
+      const res = await axios.post(`${API_URL}/api/auth/register`, { email, password });
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       setIsAuthenticated(true);

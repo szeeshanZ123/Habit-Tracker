@@ -17,6 +17,7 @@ import { Line, Doughnut, Bar } from "react-chartjs-2";
 import { getDaysInMonth, format, subMonths, addMonths } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from '../config';
     
 ChartJS.register(
   CategoryScale,
@@ -60,7 +61,7 @@ export default function Analytics() {
       const month = currentDate.getMonth();
 
       const res = await axios.get(
-        `https://habit-tracker-5ifp.onrender.com/api/habits?year=${year}&month=${month + 1}`,
+        `${API_URL}/api/habits?year=${year}&month=${month + 1}`,
         {
           headers: {
             Authorization: `Bearer ${token}`

@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Plus, Trash2, Edit2, Save, X } from 'lucide-
 import { format, getDaysInMonth, startOfMonth, addMonths, subMonths } from 'date-fns';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 export default function HabitGrid() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -30,7 +31,7 @@ export default function HabitGrid() {
   const fetchHabits = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`https://habit-tracker-5ifp.onrender.com/api/habits?year=${year}&month=${month + 1}`, {
+      const res = await axios.get(`${API_URL}/api/habits?year=${year}&month=${month + 1}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setHabits(res.data);
@@ -70,7 +71,7 @@ export default function HabitGrid() {
     setHabits(updatedHabits);
 
     try {
-      await axios.post('https://habit-tracker-5ifp.onrender.com/api/habits/toggle', {
+      await axios.post(`${API_URL}/api/habits/toggle`, {
         habitId,
         year,
         month: month + 1,
@@ -88,7 +89,7 @@ export default function HabitGrid() {
   const addHabit = async () => {
     if (!newHabitName.trim()) return;
     try {
-      const res = await axios.post('https://habit-tracker-5ifp.onrender.com/api/habits', 
+      const res = await axios.post(`${API_URL}/api/habits`, 
         { name: newHabitName },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
       );
@@ -103,7 +104,7 @@ export default function HabitGrid() {
   const deleteHabit = async (habitId) => {
     if(!window.confirm('Are you sure you want to delete this habit?')) return;
     try {
-      await axios.delete(`https://habit-tracker-5ifp.onrender.com/api/habits/${habitId}`, {
+      await axios.delete(`${API_URL}/api/habits/${habitId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setHabits(habits.filter(h => h._id !== habitId));
@@ -114,7 +115,7 @@ export default function HabitGrid() {
 
   const saveEdit = async (habitId) => {
     try {
-      await axios.put(`https://habit-tracker-5ifp.onrender.com/api/habits/${habitId}`,
+      await axios.put(`${API_URL}/api/habits/${habitId}`,
         { name: editName },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}
       );
